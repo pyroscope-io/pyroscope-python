@@ -8,7 +8,7 @@ static PyObject *start(PyObject *self, PyObject *args)
     char *app_name = NULL;
     char *server_address = NULL;
     int pid = -1;
-    char spy_name[] = "pyroscope";
+    char spy_name[] = "pyspy";
 
     // TODO: Error handling
     PyArg_ParseTuple(args, "sis", &app_name, &pid, &server_address);
@@ -32,17 +32,17 @@ static PyObject *stop(PyObject *self, PyObject *args)
     Py_RETURN_NONE;
 }
 
-static struct PyMethodDef pyroscope_methods[] = {
+static struct PyMethodDef agent_methods[] = {
     {"start", start, METH_VARARGS, "Start session"},
     {"stop", stop, METH_O, "Stop session"},
     {NULL, NULL, 0, NULL}};
 
-static struct PyModuleDef pyroscope_definition = {
-    PyModuleDef_HEAD_INIT, "pyroscope",
-    "Provides API for Pyroscope Python agent", -1, pyroscope_methods};
+static struct PyModuleDef agent_definition = {
+    PyModuleDef_HEAD_INIT, "agent",
+    "Provides API for Pyroscope Python agent", -1, agent_methods};
 
-PyMODINIT_FUNC PyInit_pyroscope(void)
+PyMODINIT_FUNC PyInit_agent(void)
 {
     Py_Initialize();
-    return PyModule_Create(&pyroscope_definition);
+    return PyModule_Create(&agent_definition);
 }

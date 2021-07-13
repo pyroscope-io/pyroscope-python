@@ -16,7 +16,7 @@ RUN python3 -m pip install poetry
 
 WORKDIR /app
 
-COPY LICENSE README.md build.py pyproject.toml pyroscope.c ./
+COPY LICENSE README.md build.py pyproject.toml agent.c ./
 COPY pyroscope/ ./pyroscope/
 
 COPY --from=pyroscope_static /libpyroscope.pyspy.a ./
