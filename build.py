@@ -1,17 +1,20 @@
 #!/usr/bin/env python3
 # encoding: utf-8
 
-import os, shutil
+import os
+import shutil
 from distutils.core import Extension, Distribution
 from distutils.errors import CCompilerError, DistutilsExecError, DistutilsPlatformError
 from distutils.command.build_ext import build_ext
 
 ext_modules = [Extension("pyroscope.agent", sources=["agent.c"], extra_objects=[
-                             "libpyroscope.pyspy.a", "librustdeps.a"])]
+    "libpyroscope.pyspy.a", "librustdeps.a"])]
+
+
 def build():
 
-    distribution = Distribution({'name': 'extended', 'ext_modules': ext_modules})
-    distribution.package_dir = 'extended'
+    distribution = Distribution(
+        {'name': 'pyroscope', 'ext_modules': ext_modules})
 
     cmd = build_ext(distribution)
     cmd.ensure_finalized()

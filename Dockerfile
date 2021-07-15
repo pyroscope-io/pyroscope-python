@@ -11,16 +11,16 @@ ENV PYTHONFAULTHANDLER=1 \
   POETRY_VIRTUALENVS_CREATE=false \
   POETRY_CACHE_DIR='/var/cache/pypoetry'
 
-RUN apt-get -y update && apt-get -y install gcc vim
+WORKDIR /app
+
+RUN apt-get -y update && apt-get -y install gcc wget
 RUN python3 -m pip install poetry
 
-WORKDIR /app
+RUN wget -qnc https://dl.pyroscope.io/static-libs/bf8582b/linux-amd64/libpyroscope.pyspy.a -O libpyroscope.pyspy.a
+RUN wget -qnc https://dl.pyroscope.io/static-libs/bf8582b/linux-amd64/libpyroscope.pyspy.h -O libpyroscope.pyspy.h
+RUN wget -qnc https://dl.pyroscope.io/static-libs/bf8582b/linux-amd64/librustdeps.a -O librustdeps.a
 
 COPY LICENSE README.md build.py pyproject.toml agent.c ./
 COPY pyroscope/ ./pyroscope/
-
-COPY --from=pyroscope_static /libpyroscope.pyspy.a ./
-COPY --from=pyroscope_static /librustdeps.a ./
-COPY --from=pyroscope_static /libpyroscope.pyspy.h ./
 
 RUN poetry build

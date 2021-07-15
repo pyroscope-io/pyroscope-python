@@ -9,17 +9,18 @@ static PyObject *start(PyObject *self, PyObject *args)
     char *server_address = NULL;
     int pid = -1;
     char spy_name[] = "pyspy";
+    int ret = 0;
 
-    // TODO: Error handling
-    PyArg_ParseTuple(args, "sis", &app_name, &pid, &server_address);
+    ret = PyArg_ParseTuple(args, "sis", &app_name, &pid, &server_address);
+    if (!ret)
+    {
+        return Py_BuildValue("i", -1);
+    }
 
-    printf("Called start() with: %s %d %s\n", app_name, pid, server_address);
-
-    int ret = Start(app_name, pid, spy_name, server_address);
-
+    ret = (int)(Start(app_name, pid, spy_name, server_address));
     if (ret)
     {
-        printf("Error occurred!\n");
+        return Py_BuildValue("i", -1);
     }
 
     Py_RETURN_NONE;
@@ -27,8 +28,18 @@ static PyObject *start(PyObject *self, PyObject *args)
 
 static PyObject *stop(PyObject *self, PyObject *args)
 {
+    // TODO: If not called, we have a leak
+    // TODO: For now `pid` is ignored, as we support only single session
     int pid = -1;
-    printf("Called stop()\n");
+
+    pid = PyLong_AsLong(args);
+    if (pid < 0)
+    {
+        return Py_BuildValue("i", -1);
+    }
+
+    Stop(pid);
+
     Py_RETURN_NONE;
 }
 
