@@ -4,7 +4,6 @@
 
 static PyObject *start(PyObject *self, PyObject *args)
 {
-    // TODO: Handle kwargs
     char *app_name = NULL;
     char *server_address = NULL;
     int pid = -1;
@@ -28,7 +27,6 @@ static PyObject *start(PyObject *self, PyObject *args)
 
 static PyObject *stop(PyObject *self, PyObject *args)
 {
-    // TODO: If not called, we have a leak
     // TODO: For now `pid` is ignored, as we support only single session
     int pid = -1;
 
@@ -50,7 +48,7 @@ static struct PyMethodDef agent_methods[] = {
 
 static struct PyModuleDef agent_definition = {
     PyModuleDef_HEAD_INIT, "agent",
-    "Provides API for Pyroscope Python agent", -1, agent_methods};
+    "Pyroscope Python agent", -1, agent_methods};
 
 PyMODINIT_FUNC PyInit_agent(void)
 {
