@@ -41,9 +41,17 @@ static PyObject *stop(PyObject *self, PyObject *args)
     return Py_BuildValue("i", 0);
 }
 
+static PyObject *change_name(PyObject *self, PyObject *args)
+{
+    const char *name = PyUnicode_AsUTF8(args);
+    ChangeName((char *)name);
+    Py_RETURN_NONE;
+}
+
 static struct PyMethodDef agent_methods[] = {
     {"start", start, METH_VARARGS, "Start session"},
     {"stop", stop, METH_O, "Stop session"},
+    {"change_name", change_name, METH_O, "Change session name"},
     {NULL, NULL, 0, NULL}};
 
 static struct PyModuleDef agent_definition = {
