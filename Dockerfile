@@ -24,3 +24,5 @@ COPY LICENSE README.md build.py pyproject.toml agent.c ./
 COPY pyroscope/ ./pyroscope/
 
 RUN poetry build
+ENTRYPOINT ["/usr/local/bin/poetry"]
+
