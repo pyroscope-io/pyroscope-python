@@ -23,7 +23,7 @@ static PyObject *start(PyObject *self, PyObject *args)
         return Py_BuildValue("i", -1);
     }
 
-    Py_RETURN_NONE;
+    return Py_BuildValue("i", 0);
 }
 
 static PyObject *stop(PyObject *self, PyObject *args)
@@ -40,7 +40,7 @@ static PyObject *stop(PyObject *self, PyObject *args)
 
     Stop(pid);
 
-    Py_RETURN_NONE;
+    return Py_BuildValue("i", 0);
 }
 
 static struct PyMethodDef agent_methods[] = {

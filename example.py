@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-from pyroscope import pyroscope
+from pyroscope import agent
 from multiprocessing import Process
 from threading import Thread
 from time import sleep
@@ -53,8 +53,10 @@ if __name__ == "__main__":
     p.start()
     print("Workers process pid: ", p.pid)
 
-    pyro = pyroscope.Pyroscope()
-    pyro.start("test name", p.pid, "http://localhost:4040")
+    ret = agent.start("test name", p.pid, "http://localhost:4040")
+    print("agent.start() -> %d" % ret)
 
     p.join()
-    pyro.stop(p.pid)
+    ret = agent.stop(p.pid)
+    print("agent.stop() -> %d" % ret)
+

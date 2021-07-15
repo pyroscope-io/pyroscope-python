@@ -7,6 +7,7 @@ from distutils.core import Extension, Distribution
 from distutils.errors import CCompilerError, DistutilsExecError, DistutilsPlatformError
 from distutils.command.build_ext import build_ext
 
+
 ext_modules = [Extension("pyroscope.agent", sources=["agent.c"], extra_objects=[
     "libpyroscope.pyspy.a", "librustdeps.a"])]
 
