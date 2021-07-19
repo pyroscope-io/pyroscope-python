@@ -16,13 +16,14 @@ WORKDIR /app
 RUN apt-get -y update && apt-get -y install gcc wget
 RUN python3 -m pip install poetry
 
-RUN wget -qnc https://dl.pyroscope.io/static-libs/bf8582b/linux-amd64/libpyroscope.pyspy.a -O libpyroscope.pyspy.a
-RUN wget -qnc https://dl.pyroscope.io/static-libs/bf8582b/linux-amd64/libpyroscope.pyspy.h -O libpyroscope.pyspy.h
-RUN wget -qnc https://dl.pyroscope.io/static-libs/bf8582b/linux-amd64/librustdeps.a -O librustdeps.a
+ARG pyroscope_libs_sha
 
-COPY LICENSE README.md build.py pyproject.toml agent.c ./
+RUN wget -qnc https://dl.pyroscope.io/static-libs/$pyroscope_libs_sha/linux-amd64/libpyroscope.pyspy.a -O libpyroscope.pyspy.a
+RUN wget -qnc https://dl.pyroscope.io/static-libs/$pyroscope_libs_sha/linux-amd64/libpyroscope.pyspy.h -O libpyroscope.pyspy.h
+RUN wget -qnc https://dl.pyroscope.io/static-libs/$pyroscope_libs_sha/linux-amd64/librustdeps.a -O librustdeps.a
+
+COPY LICENSE README.md build.py pyproject.toml agent.c test.py ./
 COPY pyroscope/ ./pyroscope/
 
 RUN poetry build
 ENTRYPOINT ["/usr/local/bin/poetry"]
-

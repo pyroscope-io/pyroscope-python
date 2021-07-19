@@ -34,13 +34,13 @@ def start_workers():
     pr = []
     pr.append(Process(target=fast_function))
     pr.append(Process(target=slow_function))
-    
+
     for p in pr:
         p.start()
         gpid = os.getpgid(p.pid)
         print("Started pid: ", p.pid, " gpid: ", gpid)
         threading.Thread(target=killer, args=(p, 10)).start()
-    
+
     [p.join() for p in pr]
 
 
@@ -59,4 +59,3 @@ if __name__ == "__main__":
     p.join()
     ret = agent.stop(p.pid)
     print("agent.stop() -> %d" % ret)
-
