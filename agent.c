@@ -19,7 +19,7 @@ static PyObject *start(PyObject *self, PyObject *args)
     ret = (int)(Start(app_name, pid, spy_name, server_address));
     if (ret)
     {
-        return Py_BuildValue("i", -1);
+        return Py_BuildValue("i", ret);
     }
 
     return Py_BuildValue("i", 0);
@@ -27,8 +27,8 @@ static PyObject *start(PyObject *self, PyObject *args)
 
 static PyObject *stop(PyObject *self, PyObject *args)
 {
-    // TODO: For now `pid` is ignored, as we support only single session
     int pid = -1;
+    int ret = -1;
 
     pid = PyLong_AsLong(args);
     if (pid < 0)
@@ -36,22 +36,39 @@ static PyObject *stop(PyObject *self, PyObject *args)
         return Py_BuildValue("i", -1);
     }
 
-    Stop(pid);
+    ret = (int)Stop(pid);
+    if (ret)
+    {
+        return Py_BuildValue("i", ret);
+    }
 
     return Py_BuildValue("i", 0);
 }
 
 static PyObject *change_name(PyObject *self, PyObject *args)
 {
-    const char *name = PyUnicode_AsUTF8(args);
-    ChangeName((char *)name);
-    Py_RETURN_NONE;
+    const char *app_name = NULL;
+    int pid = -1;
+    int ret = 0;
+
+    ret = PyArg_ParseTuple(args, "si", &app_name, &pid);
+    if (!ret)
+    {
+        return Py_BuildValue("i", -1);
+    }
+
+    ret = (int)ChangeName((char *)app_name, pid);
+    if (ret)
+    {
+        return Py_BuildValue("i", ret);
+    }
+    return Py_BuildValue("i", 0);
 }
 
 static struct PyMethodDef agent_methods[] = {
     {"start", start, METH_VARARGS, "Start session"},
     {"stop", stop, METH_O, "Stop session"},
-    {"change_name", change_name, METH_O, "Change session name"},
+    {"change_name", change_name, METH_VARARGS, "Change session name"},
     {NULL, NULL, 0, NULL}};
 
 static struct PyModuleDef agent_definition = {

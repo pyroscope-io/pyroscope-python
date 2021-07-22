@@ -55,7 +55,16 @@ if __name__ == "__main__":
 
     ret = agent.start("test name", p.pid, "http://localhost:4040")
     print("agent.start() -> %d" % ret)
+    if ret:
+        exit(ret)
+
+    ret = agent.change_name("new test name", p.pid)
+    print("agent.change_name() -> %d" % ret)
+    if ret:
+        exit(ret)
 
     p.join()
     ret = agent.stop(p.pid)
     print("agent.stop() -> %d" % ret)
+    if ret:
+        exit(ret)
