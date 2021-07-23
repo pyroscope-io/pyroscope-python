@@ -22,7 +22,7 @@ RUN wget -qnc https://dl.pyroscope.io/static-libs/$pyroscope_libs_sha/linux-amd6
 RUN wget -qnc https://dl.pyroscope.io/static-libs/$pyroscope_libs_sha/linux-amd64/libpyroscope.pyspy.h -O libpyroscope.pyspy.h
 RUN wget -qnc https://dl.pyroscope.io/static-libs/$pyroscope_libs_sha/linux-amd64/librustdeps.a -O librustdeps.a
 
-COPY LICENSE README.md build.py pyproject.toml agent.c test.py ./
+COPY LICENSE README.md build.py pyproject.toml agent.c ./
 COPY pyroscope/ ./pyroscope/
 
 RUN poetry build
