@@ -6,7 +6,7 @@ This is a repo for pyroscope python integration. It is currently under developme
 
 ### Build & publish
 
-`docker build -t pyroscope-python .`  
+`docker build --build-arg pyroscope_libs_sha=<sha> -t pyroscope-python .`  
 `docker run -e POETRY_PYPI_TOKEN="<token>" pyroscope-python publish` 
 
 #### Or to publish to custom repository
