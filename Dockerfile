@@ -14,7 +14,7 @@ ENV PYTHONFAULTHANDLER=1 \
 WORKDIR /app
 
 RUN apt-get -y update && apt-get -y install gcc wget
-RUN python3 -m pip install poetry
+RUN python3 -m pip install poetry==$POETRY_VERSION
 
 ARG pyroscope_libs_sha
 ARG pyroscope_python_tag="v0.0.0"

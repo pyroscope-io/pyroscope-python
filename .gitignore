@@ -1,4 +1,5 @@
 *.pyc
+*.swp
 
 # Packages
 *.egg
@@ -37,5 +38,4 @@ MANIFEST.in
 .venv
 /releases/*
 pip-wheel-metadata
-/poetry.toml
 

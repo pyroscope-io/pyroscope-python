@@ -7,19 +7,27 @@ Version of Pyroscope library: <sha>
 
 ### Build & publish
 
-`docker build --build-arg pyroscope_libs_sha=<sha> -t pyroscope-python .`  
-`docker run -e POETRY_PYPI_TOKEN="<token>" pyroscope-python publish` 
+```sh
+docker build --build-arg pyroscope_libs_sha=<sha> -t pyroscope-python .
+docker run -e POETRY_PYPI_TOKEN="<token>" pyroscope-python publish
+```
 
 #### Or to publish to custom repository
-`docker run -e POETRY_PYPI_TOKEN_TEST="<token>" -e POETRY_REPOSITORIES_TEST_URL="https://test.pypi.org/legacy/" pyroscope-python publish -r test`
+```sh
+docker run -e POETRY_PYPI_TOKEN_TEST="<token>" -e POETRY_REPOSITORIES_TEST_URL="https://test.pypi.org/legacy/" pyroscope-python publish -r test
+```
 
 ### Install from pip
-`python3 -m pip install pyroscope`  
+```sh
+python3 -m pip install pyroscope
+```
 or:  
-`python3 -m pip install --index-url https://test.pypi.org/simple/ pyroscope`
+```sh
+python3 -m pip install --index-url https://test.pypi.org/simple/ pyroscope
+```
 
 ### Use API
-```
+```python
 import os
 from pyroscope import agent
 pid = os.getpid()

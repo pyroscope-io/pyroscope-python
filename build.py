@@ -20,7 +20,9 @@ def build():
     cmd.ensure_finalized()
     cmd.run()
 
-    # Copy built extensions back to the project
+    # As we are building manually, the output is not automatically placed in proper
+    # directory, therefore we have to move it there. Otherwise it would not end up
+    # in final package.
     for output in cmd.get_outputs():
         relative_extension = os.path.relpath(output, cmd.build_lib)
         shutil.copyfile(output, relative_extension)

@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
+import os
+import signal
+import threading
 from pyroscope import agent
 from multiprocessing import Process
 from threading import Thread
 from time import sleep
-import os
-import signal
-import threading
 
 
 def work(n):
@@ -26,45 +26,50 @@ def slow_function():
 
 def killer(p, timeout):
     sleep(timeout)
-    print("Terminating pid: ", p.pid)
+    print(f"Terminating pid: {p.pid}")
     os.kill(p.pid, signal.SIGTERM)
 
 
 def start_workers():
-    pr = []
-    pr.append(Process(target=fast_function))
-    pr.append(Process(target=slow_function))
+    pr = [Process(target=fast_function), Process(target=slow_function)]
+    killers = []
 
     for p in pr:
         p.start()
-        gpid = os.getpgid(p.pid)
-        print("Started pid: ", p.pid, " gpid: ", gpid)
-        threading.Thread(target=killer, args=(p, 10)).start()
+        pgid = os.getpgid(p.pid)
+        print(f"Started pid: {p.pid} pgid: {pgid}")
+        k = threading.Thread(target=killer, args=(p, 10))
+        k.start()
+        killers.append(k)
 
-    [p.join() for p in pr]
+    for p in pr:
+        p.join()
+
+    for k in killers:
+        k.join()
 
 
 if __name__ == "__main__":
     main_pid = os.getpid()
-    main_gpid = os.getpgid(main_pid)
-    print("Main pid: ", main_pid, " gpid: ", main_gpid)
+    main_pgid = os.getpgid(main_pid)
+    print(f"Main pid: {main_pid} pgid: {main_pgid}")
 
     p = Process(target=start_workers)
     p.start()
-    print("Workers process pid: ", p.pid)
+    print(f"Workers process pid: {p.pid}")
 
     ret = agent.start("test name", p.pid, "http://localhost:4040")
-    print("agent.start() -> %d" % ret)
+    print(f"agent.start() -> {ret}")
     if ret:
         exit(ret)
 
     ret = agent.change_name("new test name", p.pid)
-    print("agent.change_name() -> %d" % ret)
+    print(f"agent.change_name() -> {ret}")
     if ret:
         exit(ret)
 
     p.join()
     ret = agent.stop(p.pid)
-    print("agent.stop() -> %d" % ret)
+    print(f"agent.stop() -> {ret}")
     if ret:
         exit(ret)
