@@ -1,24 +1,28 @@
+#include "libpyroscope.pyspy.h"
 #include <Python.h>
 #include <stdio.h>
-#include "libpyroscope.pyspy.h"
 
 static PyObject *start(PyObject *self, PyObject *args)
 {
+    char spy_name[] = "pyspy";
     char *app_name = NULL;
     char *server_address = NULL;
     int pid = -1;
-    char spy_name[] = "pyspy";
-    char auth[] = "";
-    char log_level[] = "debug";
+    int with_subprocesses = 0;
+    int sample_rate = 0;
+    char *auth = NULL;
+    char *log_level = NULL;
     int ret = 0;
 
-    ret = PyArg_ParseTuple(args, "sis", &app_name, &pid, &server_address);
+    ret = PyArg_ParseTuple(args, "sissiis", &app_name, &pid, &server_address,
+                           &auth, &sample_rate, &with_subprocesses, &log_level);
     if (!ret)
     {
         return Py_BuildValue("i", -1);
     }
-//TODO: Adapt
-    ret = (int)(Start(app_name, pid, spy_name, server_address, auth, 100, 1, log_level));
+
+    ret = (int)(Start(app_name, pid, spy_name, server_address, auth, sample_rate,
+                      with_subprocesses, log_level));
     if (ret)
     {
         return Py_BuildValue("i", ret);
@@ -73,9 +77,9 @@ static struct PyMethodDef agent_methods[] = {
     {"change_name", change_name, METH_VARARGS, "Change session name"},
     {NULL, NULL, 0, NULL}};
 
-static struct PyModuleDef agent_definition = {
-    PyModuleDef_HEAD_INIT, "agent",
-    "Pyroscope Python agent", -1, agent_methods};
+static struct PyModuleDef agent_definition = {PyModuleDef_HEAD_INIT, "agent",
+                                              "Pyroscope Python agent", -1,
+                                              agent_methods};
 
 PyMODINIT_FUNC PyInit_agent(void)
 {

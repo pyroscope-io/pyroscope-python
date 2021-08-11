@@ -58,18 +58,23 @@ if __name__ == "__main__":
     p.start()
     print(f"Workers process pid: {p.pid}")
 
-    ret = agent.start("test name", p.pid, "http://localhost:4040")
+    sample_rate = 100
+    with_subprocesses = True
+    auth_token = ""
+    log_level = "debug"
+    ret = agent.start("test_name", p.pid,
+                      "http://localhost:4040", auth_token, sample_rate, int(with_subprocesses), log_level)
     print(f"agent.start() -> {ret}")
     if ret:
         exit(ret)
 
-    ret = agent.change_name("new test name", p.pid)
+    ret = agent.change_name("new_test_name", p.pid)
     print(f"agent.change_name() -> {ret}")
     if ret:
         exit(ret)
 
-    p.join()
-    ret = agent.stop(p.pid)
-    print(f"agent.stop() -> {ret}")
-    if ret:
-        exit(ret)
+p.join()
+ret = agent.stop(p.pid)
+print(f"agent.stop() -> {ret}")
+if ret:
+    exit(ret)
