@@ -31,7 +31,7 @@ python3 -m pip install --index-url https://test.pypi.org/simple/ pyroscope
 import os
 from pyroscope import agent
 pid = os.getpid()
-agent.start("test name", pid, "http://localhost:4040")
+agent.start("test name", pid, "http://localhost:4040", "auth-token", 100, 1, "debug")
 agent.change_name("test name1")
 agent.stop(pid)
 
