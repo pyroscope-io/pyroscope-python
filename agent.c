@@ -8,6 +8,8 @@ static PyObject *start(PyObject *self, PyObject *args)
     char *server_address = NULL;
     int pid = -1;
     char spy_name[] = "pyspy";
+    char auth[] = "";
+    char log_level[] = "debug";
     int ret = 0;
 
     ret = PyArg_ParseTuple(args, "sis", &app_name, &pid, &server_address);
@@ -15,8 +17,8 @@ static PyObject *start(PyObject *self, PyObject *args)
     {
         return Py_BuildValue("i", -1);
     }
-
-    ret = (int)(Start(app_name, pid, spy_name, server_address));
+//TODO: Adapt
+    ret = (int)(Start(app_name, pid, spy_name, server_address, auth, 100, 1, log_level));
     if (ret)
     {
         return Py_BuildValue("i", ret);
