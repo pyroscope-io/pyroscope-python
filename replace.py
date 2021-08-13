@@ -10,4 +10,4 @@ def replace_text(path, what, text):
 
 
 if __name__ == "__main__":
-    replace_text(sys.argv[1], sys.argv[2], sys.argv[3])
+    replace_text(*sys.argv[1:])
