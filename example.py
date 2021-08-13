@@ -73,8 +73,8 @@ if __name__ == "__main__":
     if ret:
         exit(ret)
 
-p.join()
-ret = agent.stop(p.pid)
-print(f"agent.stop() -> {ret}")
-if ret:
-    exit(ret)
+    p.join()
+    ret = agent.stop(p.pid)
+    print(f"agent.stop() -> {ret}")
+    if ret:
+        exit(ret)
