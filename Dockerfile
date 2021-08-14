@@ -26,7 +26,7 @@ RUN wget -qnc https://dl.pyroscope.io/static-libs/$pyroscope_libs_sha/$os-$arch/
 RUN wget -qnc https://dl.pyroscope.io/static-libs/$pyroscope_libs_sha/$os-$arch/librustdeps.a -O librustdeps.a
 
 COPY LICENSE README.md build.py pyproject.toml agent.c replace.py ./
-COPY pyroscope/ ./pyroscope/
+COPY pyroscope_io/ ./pyroscope_io/
 
 RUN ./replace.py README.md "<sha>" $pyroscope_libs_sha
 RUN ./replace.py pyproject.toml "<sha>" $pyroscope_libs_sha

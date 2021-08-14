@@ -2,7 +2,7 @@
 import os
 import signal
 import threading
-from pyroscope import agent
+from pyroscope_io import agent
 from multiprocessing import Process
 from threading import Thread
 from time import sleep
