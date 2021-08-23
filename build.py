@@ -3,6 +3,7 @@
 
 import os
 import shutil
+import platform
 from distutils.core import Extension, Distribution
 from distutils.command.build_ext import build_ext
 
@@ -11,10 +12,30 @@ ext_modules = [Extension("pyroscope_io.agent", sources=["agent.c"], extra_object
     "libpyroscope.pyspy.a", "librustdeps.a"])]
 
 
-def build():
+def run(str):
+    res = os.system(str)
+    if res != 0:
+        raise Exception(f"Failed to run {str}")
 
+def build():
     distribution = Distribution(
         {'name': 'pyroscope_io', 'ext_modules': ext_modules})
+
+    if os.getenv("PYROSCOPE_PYTHON_LOCAL"):
+        print("PYROSCOPE_PYTHON_LOCAL yes")
+        run(f"cd ../pyroscope && make build-rust-dependencies-docker")
+        run(f"cp ../pyroscope/out/libpyroscope.pyspy.a libpyroscope.pyspy.a")
+        run(f"cp ../pyroscope/out/libpyroscope.pyspy.h libpyroscope.pyspy.h")
+        run(f"cp ../pyroscope/out/librustdeps.a librustdeps.a")
+    else:
+        pyroscope_libs_sha = "e2afa55"
+        # TODO: improve this logic
+        arch = 'amd64' if platform.machine() == 'x86_64' else 'arm64'
+        os_name = 'linux' if platform.system() == 'Linux' else 'mac'
+        prefix = f"https://dl.pyroscope.io/static-libs/{pyroscope_libs_sha}/{os_name}-{arch}"
+        run(f"wget -qnc {prefix}/libpyroscope.pyspy.a -O libpyroscope.pyspy.a")
+        run(f"wget -qnc {prefix}/libpyroscope.pyspy.h -O libpyroscope.pyspy.h")
+        run(f"wget -qnc {prefix}/librustdeps.a -O librustdeps.a")
 
     cmd = build_ext(distribution)
     cmd.ensure_finalized()
