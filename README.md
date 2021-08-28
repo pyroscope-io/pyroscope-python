@@ -8,8 +8,8 @@ Version of Pyroscope library: <sha>
 ### Build & publish
 
 ```sh
-docker build --build-arg pyroscope_libs_sha=<sha> -t pyroscope-python .
-docker run -e POETRY_PYPI_TOKEN="<token>" pyroscope-python publish
+docker build --build-arg python_version=3.9 -t pyroscope-python .
+docker run pyroscope-python publish --username <username> --password <password>
 ```
 
 #### Or to publish to custom repository
@@ -29,10 +29,11 @@ python3 -m pip install --index-url https://test.pypi.org/simple/ pyroscope
 ### Use API
 ```python
 import os
-from pyroscope import agent
+import pyroscope_io as pyro
 pid = os.getpid()
-agent.start("test name", pid, "http://localhost:4040", "auth-token", 100, 1, "debug")
-agent.change_name("test name1")
-agent.stop(pid)
+pyro.configure(pyro.Config("test name", "http://localhost:4040"))
+pyro.start()
+pyro.change_name("test name1")
+pyro.stop()
 
 ```
