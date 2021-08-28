@@ -34,9 +34,9 @@ def build():
         os_name = 'linux' if platform.system().lower() == 'linux' else 'mac'
         prefix = f"https://dl.pyroscope.io/static-libs/{pyroscope_libs_sha}/{os_name}-{arch}"
         run(f"rm -f libpyroscope.pyspy.a libpyroscope.pyspy.h librustdeps.a")
-        run(f"wget -qnc {prefix}/libpyroscope.pyspy.a -O libpyroscope.pyspy.a")
-        run(f"wget -qnc {prefix}/libpyroscope.pyspy.h -O libpyroscope.pyspy.h")
-        run(f"wget -qnc {prefix}/librustdeps.a -O librustdeps.a")
+        run(f"wget -nc {prefix}/libpyroscope.pyspy.a -O libpyroscope.pyspy.a")
+        run(f"wget -nc {prefix}/libpyroscope.pyspy.h -O libpyroscope.pyspy.h")
+        run(f"wget -nc {prefix}/librustdeps.a -O librustdeps.a")
 
     cmd = build_ext(distribution)
     cmd.ensure_finalized()
