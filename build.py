@@ -17,7 +17,7 @@ def run(str):
     if res != 0:
         raise Exception(f"Failed to run {str}")
 
-def build():
+def build(_):
     distribution = Distribution(
         {'name': 'pyroscope_io', 'ext_modules': ext_modules})
 
