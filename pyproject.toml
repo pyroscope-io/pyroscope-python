@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "pyroscope_io"
-version = "v0.0.4"
+version = "v0.0.5"
 description = "API for pyroscope pyspy agent."
 license = "Apache-2.0"
 authors = ["Pyroscope Team"]

@@ -28,7 +28,7 @@ def build():
         run(f"cp ../pyroscope/out/libpyroscope.pyspy.h libpyroscope.pyspy.h")
         run(f"cp ../pyroscope/out/librustdeps.a librustdeps.a")
     else:
-        pyroscope_libs_sha = "785c839"
+        pyroscope_libs_sha = "8aec87b"
         # TODO: improve this logic
         arch = 'amd64' if platform.machine().lower() == 'x86_64' else 'arm64'
         os_name = 'linux' if platform.system().lower() == 'linux' else 'mac'
