@@ -20,6 +20,8 @@ def run(str):
 def build(_):
     distribution = Distribution(
         {'name': 'pyroscope_io', 'ext_modules': ext_modules})
+    arch = 'amd64' if platform.machine().lower() == 'x86_64' else 'arm64'
+    os_name = 'linux' if platform.system().lower() == 'linux' else 'mac'
 
     if os.getenv("PYROSCOPE_PYTHON_LOCAL"):
         print("PYROSCOPE_PYTHON_LOCAL yes")
@@ -30,8 +32,6 @@ def build(_):
     else:
         pyroscope_libs_sha = "8aec87b"
         # TODO: improve this logic
-        arch = 'amd64' if platform.machine().lower() == 'x86_64' else 'arm64'
-        os_name = 'linux' if platform.system().lower() == 'linux' else 'mac'
         prefix = f"https://dl.pyroscope.io/static-libs/{pyroscope_libs_sha}/{os_name}-{arch}"
         run(f"rm -f libpyroscope.pyspy.a libpyroscope.pyspy.h librustdeps.a")
         run(f"wget -nc {prefix}/libpyroscope.pyspy.a -O libpyroscope.pyspy.a")
@@ -42,15 +42,16 @@ def build(_):
     cmd.ensure_finalized()
     cmd.run()
 
-    # As we are building manually, the output is not automatically placed in proper
-    # directory, therefore we have to move it there. Otherwise it would not end up
-    # in final package.
-    for output in cmd.get_outputs():
-        relative_extension = os.path.relpath(output, cmd.build_lib)
-        shutil.copyfile(output, relative_extension)
-        mode = os.stat(relative_extension).st_mode
-        mode |= (mode & 0o444) >> 2
-        os.chmod(relative_extension, mode)
+    if 'linux' in os_name:
+        # As we are building manually, the output is not automatically placed in proper
+        # directory, therefore we have to move it there. Otherwise it would not end up
+        # in final package.
+        for output in cmd.get_outputs():
+            relative_extension = os.path.relpath(output, cmd.build_lib)
+            shutil.copyfile(output, relative_extension)
+            mode = os.stat(relative_extension).st_mode
+            mode |= (mode & 0o444) >> 2
+            os.chmod(relative_extension, mode)
 
 
 if __name__ == '__main__':
