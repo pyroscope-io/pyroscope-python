@@ -5,7 +5,6 @@ description = "API for pyroscope pyspy agent."
 license = "Apache-2.0"
 authors = ["Pyroscope Team"]
 readme = "README.md"
-include = ["agent.c", "libpyroscope.pyspy.a", "librustdeps.a", "libpyroscope.pyspy.h"]
 
 [virtualenvs]
 in-project = true

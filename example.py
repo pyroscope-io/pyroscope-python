@@ -2,7 +2,7 @@
 import os
 import signal
 import threading
-from pyroscope_io import agent
+import pyroscope_io as pyro
 from multiprocessing import Process
 from threading import Thread
 from time import sleep
@@ -38,7 +38,7 @@ def start_workers():
         p.start()
         pgid = os.getpgid(p.pid)
         print(f"Started pid: {p.pid} pgid: {pgid}")
-        k = threading.Thread(target=killer, args=(p, 10))
+        k = threading.Thread(target=killer, args=(p, 60))
         k.start()
         killers.append(k)
 
@@ -54,27 +54,26 @@ if __name__ == "__main__":
     main_pgid = os.getpgid(main_pid)
     print(f"Main pid: {main_pid} pgid: {main_pgid}")
 
-    p = Process(target=start_workers)
-    p.start()
-    print(f"Workers process pid: {p.pid}")
-
     sample_rate = 100
     with_subprocesses = True
     auth_token = ""
     log_level = "debug"
-    ret = agent.start("test_name", p.pid,
-                      "http://localhost:4040", auth_token, sample_rate, int(with_subprocesses), log_level)
-    print(f"agent.start() -> {ret}")
-    if ret:
-        exit(ret)
 
-    ret = agent.change_name("new_test_name", p.pid)
-    print(f"agent.change_name() -> {ret}")
-    if ret:
-        exit(ret)
+    pyro.configure(pyro.Config("test_name", "http://localhost:4040",
+                   auth_token, sample_rate, int(with_subprocesses), log_level))
 
+    pyro.start()
+    sleep(5)
+
+    p = Process(target=start_workers)
+    p.start()
+    print(f"Workers process pid: {p.pid}")
+
+    pyro.change_name("new_test_name")
+    sleep(5)
+
+    pyro.set_tag("tag-key", "tag-value")
+    sleep(10)
+
+    pyro.stop()
     p.join()
-    ret = agent.stop(p.pid)
-    print(f"agent.stop() -> {ret}")
-    if ret:
-        exit(ret)

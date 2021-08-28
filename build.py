@@ -8,7 +8,7 @@ from distutils.core import Extension, Distribution
 from distutils.command.build_ext import build_ext
 
 
-ext_modules = [Extension("pyroscope_io.agent", sources=["agent.c"], extra_objects=[
+ext_modules = [Extension("pyroscope_io._agent", sources=["agent.c"], extra_objects=[
     "libpyroscope.pyspy.a", "librustdeps.a"])]
 
 
@@ -28,10 +28,10 @@ def build():
         run(f"cp ../pyroscope/out/libpyroscope.pyspy.h libpyroscope.pyspy.h")
         run(f"cp ../pyroscope/out/librustdeps.a librustdeps.a")
     else:
-        pyroscope_libs_sha = "e2afa55"
+        pyroscope_libs_sha = "785c839"
         # TODO: improve this logic
-        arch = 'amd64' if platform.machine() == 'x86_64' else 'arm64'
-        os_name = 'linux' if platform.system() == 'Linux' else 'mac'
+        arch = 'amd64' if platform.machine().lower() == 'x86_64' else 'arm64'
+        os_name = 'linux' if platform.system().lower() == 'linux' else 'mac'
         prefix = f"https://dl.pyroscope.io/static-libs/{pyroscope_libs_sha}/{os_name}-{arch}"
         run(f"wget -qnc {prefix}/libpyroscope.pyspy.a -O libpyroscope.pyspy.a")
         run(f"wget -qnc {prefix}/libpyroscope.pyspy.h -O libpyroscope.pyspy.h")
