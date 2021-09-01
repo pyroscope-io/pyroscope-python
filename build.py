@@ -30,7 +30,7 @@ def build(_):
         run(f"cp ../pyroscope/out/libpyroscope.pyspy.h libpyroscope.pyspy.h")
         run(f"cp ../pyroscope/out/librustdeps.a librustdeps.a")
     else:
-        pyroscope_libs_sha = "8aec87b"
+        pyroscope_libs_sha = "df45c48"
         # TODO: improve this logic
         prefix = f"https://dl.pyroscope.io/static-libs/{pyroscope_libs_sha}/{os_name}-{arch}"
         run(f"rm -f libpyroscope.pyspy.a libpyroscope.pyspy.h librustdeps.a")
@@ -42,16 +42,15 @@ def build(_):
     cmd.ensure_finalized()
     cmd.run()
 
-    if 'linux' in os_name:
-        # As we are building manually, the output is not automatically placed in proper
-        # directory, therefore we have to move it there. Otherwise it would not end up
-        # in final package.
-        for output in cmd.get_outputs():
-            relative_extension = os.path.relpath(output, cmd.build_lib)
-            shutil.copyfile(output, relative_extension)
-            mode = os.stat(relative_extension).st_mode
-            mode |= (mode & 0o444) >> 2
-            os.chmod(relative_extension, mode)
+    # As we are building manually, the output is not automatically placed in proper
+    # directory, therefore we have to move it there. Otherwise it would not end up
+    # in final package.
+    for output in cmd.get_outputs():
+        relative_extension = os.path.relpath(output, cmd.build_lib)
+        shutil.copyfile(output, relative_extension)
+        mode = os.stat(relative_extension).st_mode
+        mode |= (mode & 0o444) >> 2
+        os.chmod(relative_extension, mode)
 
 
 if __name__ == '__main__':
