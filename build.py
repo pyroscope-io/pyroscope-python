@@ -8,7 +8,7 @@ from distutils.core import Extension, Distribution
 from distutils.command.build_ext import build_ext
 
 
-ext_modules = [Extension("pyroscope_io._agent", sources=["agent.c"], extra_objects=[
+ext_modules = [Extension("pyroscope_io.agent", sources=["agent.c"], extra_objects=[
     "libpyroscope.pyspy.a", "librustdeps.a"])]
 
 

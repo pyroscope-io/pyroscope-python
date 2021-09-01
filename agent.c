@@ -109,7 +109,7 @@ static struct PyMethodDef agent_methods[] = {
     {"build_summary", build_summary, METH_NOARGS, "Build summary"},
     {NULL, NULL, 0, NULL}};
 
-static struct PyModuleDef agent_definition = {PyModuleDef_HEAD_INIT, "_agent",
+static struct PyModuleDef agent_definition = {PyModuleDef_HEAD_INIT, "agent",
                                               "Pyroscope Python agent", -1,
                                               agent_methods};
 

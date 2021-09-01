@@ -1,4 +1,4 @@
-from pyroscope_io import _agent
+from pyroscope_io import agent
 
 
 class PyroscopeError(Exception):
@@ -47,7 +47,7 @@ def start():
     if __is_started():
         raise PyroscopeError("Already started!")
 
-    if _agent.start(__config.app_name, __config.server_address, __config.auth,
+    if agent.start(__config.app_name, __config.server_address, __config.auth,
                     __config.sample_rate, __config.with_subprocesses, __config.log_level):
         raise PyroscopeError()
 
@@ -58,7 +58,7 @@ def stop():
     if not __is_started():
         raise PyroscopeError("Not started!")
 
-    if _agent.stop():
+    if agent.stop():
         raise PyroscopeError()
 
     __set_started(False)
@@ -69,7 +69,7 @@ def change_name(name):
         raise PyroscopeError("Not started!")
 
     __set_name(name)
-    if _agent.change_name(__config.app_name):
+    if agent.change_name(__config.app_name):
         raise PyroscopeError()
 
 
@@ -77,19 +77,19 @@ def set_tag(key, value):
     if not __is_started():
         raise PyroscopeError("Not started!")
 
-    if _agent.set_tag(key, value):
+    if agent.set_tag(key, value):
         raise PyroscopeError()
 
 
 def build_summary():
-    return _agent.build_summary()
+    return agent.build_summary()
 
 
 def test_logger():
-    if _agent.test_logger():
+    if agent.test_logger():
         raise PyroscopeError()
 
 
 def set_logger_level(level):
-    if _agent.set_logger_level(level):
+    if agent.set_logger_level(level):
         raise PyroscopeError()
