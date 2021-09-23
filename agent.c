@@ -113,7 +113,7 @@ static struct PyModuleDef agent_definition = {PyModuleDef_HEAD_INIT, "agent",
                                               "Pyroscope Python agent", -1,
                                               agent_methods};
 
-PyMODINIT_FUNC PyInit__agent(void)
+PyMODINIT_FUNC PyInit_agent(void)
 {
     Py_Initialize();
     return PyModule_Create(&agent_definition);
