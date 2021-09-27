@@ -1,84 +1,47 @@
+from collections import namedtuple
+from contextlib import contextmanager
+
 from pyroscope_io import agent
+
+Config = namedtuple('Config', ('app_name', 'server_address',
+                    'auth_token', 'sample_rate', 'with_subprocesses', 'log_level'))
 
 
 class PyroscopeError(Exception):
     pass
 
 
-class Config:
-    def __init__(self, app_name, server_address, auth="", sample_rate=100, with_subprocesses=0, log_level="debug"):
-        self.app_name = app_name
-        self.server_address = server_address
-        self.auth = auth
-        self.sample_rate = sample_rate
-        self.with_subprocesses = with_subprocesses
-        self.log_level = log_level
-        self.started = False
-
-
-__config = None
-
-
-def configure(c):
-    assert isinstance(c, Config)
-    global __config
-    __config = c
-
-
-def __is_started():
-    global __config
-    return __config.started
-
-
-def __set_started(started):
-    global __config
-    __config.started = started
-
-
-def __set_name(name):
-    global __config
-    __config.app_name = name
-
-
-def start():
-    if isinstance(__config, type(None)):
-        raise PyroscopeError("Not configured!")
-
-    if __is_started():
-        raise PyroscopeError("Already started!")
-
-    if agent.start(__config.app_name, __config.server_address, __config.auth,
-                    __config.sample_rate, __config.with_subprocesses, __config.log_level):
-        raise PyroscopeError()
-
-    __set_started(True)
+def configure(app_name, server_address, auth_token="", sample_rate=100, with_subprocesses=0, log_level="debug"):
+    agent.start(app_name, server_address, auth_token, sample_rate, int(with_subprocesses), log_level)
 
 
 def stop():
-    if not __is_started():
-        raise PyroscopeError("Not started!")
-
-    if agent.stop():
-        raise PyroscopeError()
-
-    __set_started(False)
+    agent.stop()
 
 
 def change_name(name):
-    if not __is_started():
-        raise PyroscopeError("Not started!")
-
-    __set_name(name)
-    if agent.change_name(__config.app_name):
-        raise PyroscopeError()
+    agent.change_name(name)
 
 
-def set_tag(key, value):
-    if not __is_started():
-        raise PyroscopeError("Not started!")
+@contextmanager
+def tag_wrapper(tags):
+    for key, value in tags.items():
+        agent.set_tag(key, value)
+    try:
+        yield
+    finally:
+        for key in tags.keys():
+            agent.set_tag(key, "")
 
-    if agent.set_tag(key, value):
-        raise PyroscopeError()
+
+def tag(tags):
+    for key, value in tags.items():
+        agent.set_tag(key, value)
+
+
+def remove_tags(*keys):
+    for key in keys:
+        agent.set_tag(key, "")
 
 
 def build_summary():
@@ -86,10 +49,4 @@ def build_summary():
 
 
 def test_logger():
-    if agent.test_logger():
-        raise PyroscopeError()
-
-
-def set_logger_level(level):
-    if agent.set_logger_level(level):
-        raise PyroscopeError()
+    agent.test_logger()

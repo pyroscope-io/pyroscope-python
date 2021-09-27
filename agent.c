@@ -105,7 +105,6 @@ static struct PyMethodDef agent_methods[] = {
     {"change_name", change_name, METH_O, "Change application name"},
     {"set_tag", set_tag, METH_VARARGS, "Set tags for the current session"},
     {"test_logger", test_logger, METH_NOARGS, "Test logger"},
-    {"set_logger_level", set_logger_level, METH_O, "Set logger level"},
     {"build_summary", build_summary, METH_NOARGS, "Build summary"},
     {NULL, NULL, 0, NULL}};
 

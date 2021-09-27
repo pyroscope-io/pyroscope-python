@@ -1,5 +1,5 @@
 import os
-import pyroscope_io as pyro
+import pyroscope_io as pyroscope
 import random
 import time
 
@@ -11,37 +11,34 @@ def work(n):
 
 
 def fast_function():
-    pyro.set_tag("work", "fast")
-    work(20000)
-    pyro.set_tag("work", "")
+    with pyroscope.tag_wrapper({ "function": "fast" }):
+        work(20000)
 
 
 def slow_function():
-    pyro.set_tag("work", "slow")
+    pyroscope.tag({ "function": "slow" })
     work(80000)
-    pyro.set_tag("work", "")
+    pyroscope.remove_tags("function")
 
 
 if __name__ == "__main__":
+    pyroscope.configure(
+        app_name          = "test.python.app",
+        server_address    = "http://localhost:4040",
+        sample_rate       = 100,
+        with_subprocesses = True,
+        log_level         = "debug"
+    )
 
-    pid = os.getpid()
-    pyro.configure(pyro.Config("test.python.app",
-                   "http://localhost:4040", "", 100, int(True), "debug"))
+    pyroscope.tag({
+        "container_id": "123",
+    })
 
-    pyro.start()
-    print(f"build_summary {pyro.build_summary()}")
-    pyro.set_logger_level(5)
-
-    print(f"original process {pid}")
-    ret = os.fork()
-    print(f"fork {ret}")
+    print(f"build_summary {pyroscope.build_summary()}")
 
     while True:
         r = random.random()
         if r < 0.5:
-            print(f"pid {os.getpid()}")
-            time.sleep(random.random())
-        elif r < 0.5:
             fast_function()
         else:
             slow_function()
