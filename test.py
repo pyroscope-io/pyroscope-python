@@ -1,44 +1,32 @@
-import os
-import pyroscope_io as pyroscope
-import random
-import time
+#!/usr/bin/env python3
 
+import os
+
+import pyroscope_io as pyroscope
+
+pyroscope.configure(
+	app_name       = "simple.python.app",
+	server_address = "http://pyroscope:4040",
+	tags           = {
+		"hostname": os.getenv("HOSTNAME"),
+	}
+)
 
 def work(n):
-    i = 0
-    while i < n:
-        i += 1
-
+	i = 0
+	while i < n:
+		i += 1
 
 def fast_function():
-    with pyroscope.tag_wrapper({ "function": "fast" }):
-        work(20000)
-
+	with pyroscope.tag_wrapper({ "function": "fast" }):
+		work(20000)
 
 def slow_function():
-    pyroscope.tag({ "function": "slow" })
-    work(80000)
-    pyroscope.remove_tags("function")
-
+	pyroscope.tag({ "function": "slow" })
+	work(80000)
+	pyroscope.remove_tags("function")
 
 if __name__ == "__main__":
-    pyroscope.configure(
-        app_name          = "test.python.app",
-        server_address    = "http://localhost:4040",
-        sample_rate       = 100,
-        with_subprocesses = True,
-        log_level         = "debug"
-    )
-
-    pyroscope.tag({
-        "container_id": "123",
-    })
-
-    print(f"build_summary {pyroscope.build_summary()}")
-
-    while True:
-        r = random.random()
-        if r < 0.5:
-            fast_function()
-        else:
-            slow_function()
+	while True:
+		fast_function()
+		slow_function()
