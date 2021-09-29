@@ -28,4 +28,4 @@ COPY LICENSE README.md build.py pyproject.toml agent.c ./
 COPY pyroscope_io/ ./pyroscope_io/
 
 RUN poetry build --format wheel
-ENTRYPOINT ["/usr/local/bin/poetry"]
+ENTRYPOINT ["/opt/python/${python_version}/bin/poetry"]
