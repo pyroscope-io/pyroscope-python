@@ -54,15 +54,7 @@ if __name__ == "__main__":
     main_pgid = os.getpgid(main_pid)
     print(f"Main pid: {main_pid} pgid: {main_pgid}")
 
-    sample_rate = 100
-    with_subprocesses = True
-    auth_token = ""
-    log_level = "debug"
-
-    pyro.configure(pyro.Config("test_name", "http://localhost:4040",
-                   auth_token, sample_rate, int(with_subprocesses), log_level))
-
-    pyro.start()
+    pyro.configure("test_name", "http://localhost:4040")
     sleep(5)
 
     p = Process(target=start_workers)
