@@ -1,4 +1,4 @@
-ARG python_version=39
+ARG python_version=cp39-cp39
 ARG manylinux_version=manylinux2014
 ARG manylinux_arch=x86_64
 
@@ -21,7 +21,7 @@ WORKDIR /app
 
 RUN yum install -y wget
 
-ENV PATH=/opt/python/cp${python_version}-cp${python_version}/bin:$PATH
+ENV PATH=/opt/python/${python_version}/bin:$PATH
 RUN python3 -m pip install poetry==$POETRY_VERSION
 
 COPY LICENSE README.md build.py pyproject.toml agent.c ./
