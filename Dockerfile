@@ -1,5 +1,10 @@
-ARG python_version="3.9"
-FROM python:$python_version-slim-buster
+ARG python_version=39
+ARG manylinux_version=manylinux2014
+ARG manylinux_arch=x86_64
+
+FROM quay.io/pypa/${manylinux_version}_${manylinux_arch}:latest
+
+ARG python_version
 
 ENV PYTHONFAULTHANDLER=1 \
   PYTHONHASHSEED=random \
@@ -14,7 +19,9 @@ ENV PYTHONFAULTHANDLER=1 \
 
 WORKDIR /app
 
-RUN apt-get -y update && apt-get -y install gcc wget
+RUN yum install -y wget
+
+ENV PATH=/opt/python/cp${python_version}-cp${python_version}/bin:$PATH
 RUN python3 -m pip install poetry==$POETRY_VERSION
 
 COPY LICENSE README.md build.py pyproject.toml agent.c ./
