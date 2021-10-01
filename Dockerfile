@@ -21,7 +21,7 @@ ENV PYTHONFAULTHANDLER=1 \
 
 WORKDIR /app
 
-RUN yum install -y wget patchelf
+RUN yum install -y wget
 
 ENV PATH=/opt/python/${python_version}/bin:$PATH
 RUN python3 -m pip install poetry==$POETRY_VERSION
