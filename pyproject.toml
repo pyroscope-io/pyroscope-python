@@ -1,10 +1,14 @@
 [tool.poetry]
-name = "pyroscope_io"
-version = "v0.2.4"
-description = "API for pyroscope pyspy agent."
+name = "pyroscope-io"
+version = "v0.3.0"
+description = "Pyroscope integration for Python"
 license = "Apache-2.0"
 authors = ["Pyroscope Team"]
 readme = "README.md"
+packages = [
+  { include = "pyroscope_io" },
+  { include = "pyroscope" },
+]
 
 [virtualenvs]
 in-project = true
@@ -16,5 +20,12 @@ python = "^3.6"
 script = "build.py"
 
 [build-system]
-requires = ["poetry>=1.1.5", "poetry-core>=1.0.3"]
+requires = ["poetry>=1.1.10", "poetry-core>=1.0.3"]
 build-backend = "poetry.masonry.api"
+
+[project.urls]
+homepage = "https://pyroscope.io/"
+documentation = "https://pyroscope.io/docs"
+source = "https://github.com/pyroscope-io/pyroscope-python"
+download = "https://github.com/pyroscope-io/pyroscope/releases"
+tracker = "https://github.com/pyroscope-io/pyroscope/issues"

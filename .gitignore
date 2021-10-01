@@ -6,6 +6,7 @@
 !/tests/**/*.egg
 /*.egg-info
 /dist/*
+/wheelhouse/*
 build
 _build
 .cache
