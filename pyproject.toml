@@ -5,6 +5,7 @@ description = "Pyroscope integration for Python"
 license = "Apache-2.0"
 authors = ["Pyroscope Team"]
 readme = "README.md"
+include = ["agent.c"]
 packages = [
   { include = "pyroscope_io" },
   { include = "pyroscope" },
@@ -20,7 +21,7 @@ python = "^3.6"
 script = "build.py"
 
 [build-system]
-requires = ["poetry>=1.1.10", "poetry-core>=1.0.3"]
+requires = ["setuptools", "wheel", "poetry>=1.1.10", "poetry-core>=1.0.3"]
 build-backend = "poetry.masonry.api"
 
 [project.urls]

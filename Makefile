@@ -25,6 +25,12 @@ install: build
 		pip3 install --force-reinstall "wheelhouse/$$(ls -1t wheelhouse | grep whl | head -n 1)"; \
 	}
 
+.PHONY: install-src
+install-src: build
+	{ \
+		pip3 install --force-reinstall "dist/$$(ls -1t dist | grep tar.gz | head -n 1)"; \
+	}
+
 .PHONY: test
 test: install
 	python3 test.py
