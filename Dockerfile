@@ -30,6 +30,7 @@ RUN python3 -m pip install auditwheel
 COPY LICENSE README.md build.py pyproject.toml agent.c ./
 COPY pyroscope/ ./pyroscope/
 COPY pyroscope_io/ ./pyroscope_io/
+COPY test.sh .
 
 RUN poetry build --format $format
 RUN if [[ "$format" == "wheel" ]] ; then auditwheel repair ./dist/*.whl; fi
