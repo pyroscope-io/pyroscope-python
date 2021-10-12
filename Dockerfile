@@ -31,6 +31,7 @@ COPY LICENSE README.md build.py pyproject.toml agent.c ./
 COPY pyroscope/ ./pyroscope/
 COPY pyroscope_io/ ./pyroscope_io/
 COPY Makefile .
+COPY test_wheel.py .
 
 RUN make build_$format
 
