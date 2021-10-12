@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "pyroscope-io"
-version = "v0.4.6"
+version = "v0.4.7"
 description = "Pyroscope integration for Python"
 license = "Apache-2.0"
 authors = ["Pyroscope Team"]
