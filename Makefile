@@ -4,33 +4,40 @@ clean:
 	rm -rf dist
 	rm -rf wheelhouse
 
-.PHONY: build
-build: clean
-	poetry build --format sdist
+.PHONY: build_wheel
+build_wheel: clean
+	python3 -m poetry build --format wheel
+
+.PHONY: repair_wheel
+repair_wheel:
+	{ \
+	auditwheel repair "dist/$$(ls -1t dist | grep whl | head -n 1)"; \
+	rm -rf ./dist; \
+	mv ./wheelhouse ./dist; \
+	}
+
+.PHONY: build_sdist
+build_sdist: clean
+	python3 -m poetry build --format sdist
 	{ \
 		tar -tvf "dist/$$(ls -1t dist | grep tar.gz | head -n 1)"; \
 	}
 
-	poetry build --format wheel
-	{ \
-		unzip -l "dist/$$(ls -1t dist | grep whl | head -n 1)"; \
-		auditwheel show "dist/$$(ls -1t dist | grep whl | head -n 1)"; \
-		auditwheel repair "dist/$$(ls -1t dist | grep whl | head -n 1)"; \
-		unzip -l "wheelhouse/$$(ls -1t wheelhouse | grep whl | head -n 1)"; \
-	}
-
 .PHONY: install
-install: build
+install: build_wheel
 	{ \
-		pip3 install --force-reinstall "wheelhouse/$$(ls -1t wheelhouse | grep whl | head -n 1)"; \
+		python3 -m pip install --force-reinstall "dist/$$(ls -1t dist | grep whl | head -n 1)"; \
 	}
 
 .PHONY: install-src
-install-src: build
+install-src: build_sdist
 	{ \
-		pip3 install --force-reinstall "dist/$$(ls -1t dist | grep tar.gz | head -n 1)"; \
+		python3 -m pip install --force-reinstall "dist/$$(ls -1t dist | grep tar.gz | head -n 1)"; \
 	}
 
 .PHONY: test
-test: install
-	python3 test.py
+test:
+	{ \
+	python3 -m unittest test_wheel.py; \
+	}
+

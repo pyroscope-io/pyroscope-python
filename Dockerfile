@@ -30,10 +30,9 @@ RUN python3 -m pip install auditwheel
 COPY LICENSE README.md build.py pyproject.toml agent.c ./
 COPY pyroscope/ ./pyroscope/
 COPY pyroscope_io/ ./pyroscope_io/
+COPY Makefile .
+COPY test_wheel.py .
 
-RUN poetry build --format $format
-RUN if [[ "$format" == "wheel" ]] ; then auditwheel repair ./dist/*.whl; fi
-RUN if [[ "$format" == "wheel" ]] ; then rm -rf ./dist ; fi
-RUN if [[ "$format" == "wheel" ]] ; then mv ./wheelhouse ./dist ; fi
+RUN make build_$format
 
 ENTRYPOINT ["/opt/python/${python_version}/bin/poetry"]

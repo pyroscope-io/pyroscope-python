@@ -25,9 +25,6 @@ pip-log.txt
 .python-version
 .vscode/*
 
-/test.py
-/test_*.*
-
 /setup.cfg
 MANIFEST.in
 /setup.py
