@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import os
+from time import time
 
 import pyroscope
 
@@ -27,5 +28,7 @@ def slow_function():
 	pyroscope.remove_tags("function")
 
 if __name__ == "__main__":
-	fast_function()
-	slow_function()
+        t0 = time.time()
+        while time.time() - t0 < 15:
+	        fast_function()
+	        slow_function()
