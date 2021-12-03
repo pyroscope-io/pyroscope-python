@@ -28,7 +28,7 @@ def slow_function():
 	pyroscope.remove_tags("function")
 
 if __name__ == "__main__":
-        t0 = time.time()
-        while time.time() - t0 < 15:
+        t0 = time()
+        while time() - t0 < 15:
 	        fast_function()
 	        slow_function()

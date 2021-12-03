@@ -4,6 +4,7 @@
 import os
 import shutil
 import platform
+from urllib.request import urlretrieve
 from distutils.core import Extension, Distribution
 from distutils.command.build_ext import build_ext
 
@@ -33,10 +34,9 @@ def build(_):
         pyroscope_libs_sha = "9f7e83f"
         # TODO: improve this logic
         prefix = f"https://dl.pyroscope.io/static-libs/{pyroscope_libs_sha}/{os_name}-{arch}"
-        run(f"rm -f libpyroscope.pyspy.a libpyroscope.pyspy.h librustdeps.a")
-        run(f"wget -nc {prefix}/libpyroscope.pyspy.a -O libpyroscope.pyspy.a")
-        run(f"wget -nc {prefix}/libpyroscope.pyspy.h -O libpyroscope.pyspy.h")
-        run(f"wget -nc {prefix}/librustdeps.a -O librustdeps.a")
+        urlretrieve(f"{prefix}/libpyroscope.pyspy.a", "libpyroscope.pyspy.a")
+        urlretrieve(f"{prefix}/libpyroscope.pyspy.h", "libpyroscope.pyspy.h")
+        urlretrieve(f"{prefix}/librustdeps.a", "librustdeps.a")
 
     cmd = build_ext(distribution)
     cmd.ensure_finalized()
@@ -55,4 +55,3 @@ def build(_):
 
 if __name__ == '__main__':
     build()
-
