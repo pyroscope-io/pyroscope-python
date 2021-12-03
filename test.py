@@ -8,7 +8,7 @@ pyroscope.configure(
 	app_name       = "simple.python.app",
 	server_address = "http://pyroscope:4040",
 	tags           = {
-		"hostname": os.getenv("HOSTNAME"),
+		"hostname": os.getenv("HOSTNAME", ""),
 	}
 )
 
