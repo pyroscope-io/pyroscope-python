@@ -35,8 +35,8 @@ install-src: build-src
 
 .PHONY: test
 test: install
-	python3 test.py
+	python3 tests/test.py
 
 .PHONY: test-src
 test-src: install-src
-	python3 test.py
+	python3 tests/test.py
