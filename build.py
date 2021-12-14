@@ -30,7 +30,7 @@ def build(_):
         run(f"cp ../pyroscope/out/libpyroscope.pyspy.h libpyroscope.pyspy.h")
         run(f"cp ../pyroscope/out/librustdeps.a librustdeps.a")
     else:
-        pyroscope_libs_sha = "10a0476"
+        pyroscope_libs_sha = "e44f13d9"
         # TODO: improve this logic
         prefix = f"https://dl.pyroscope.io/static-libs/{pyroscope_libs_sha}/{os_name}-{arch}"
         run(f"rm -f libpyroscope.pyspy.a libpyroscope.pyspy.h librustdeps.a")
