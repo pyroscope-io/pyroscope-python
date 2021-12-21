@@ -4,13 +4,15 @@ clean:
 	rm -rf dist
 	rm -rf wheelhouse
 
-.PHONY: build
-build: clean
+.PHONY: build-src
+build-src: clean
 	poetry build --format sdist
 	{ \
 		tar -tvf "dist/$$(ls -1t dist | grep tar.gz | head -n 1)"; \
 	}
 
+.PHONY: build
+build: clean
 	poetry build --format wheel
 	{ \
 		unzip -l "dist/$$(ls -1t dist | grep whl | head -n 1)"; \
@@ -26,11 +28,15 @@ install: build
 	}
 
 .PHONY: install-src
-install-src: build
+install-src: build-src
 	{ \
 		pip3 install --force-reinstall "dist/$$(ls -1t dist | grep tar.gz | head -n 1)"; \
 	}
 
 .PHONY: test
 test: install
-	python3 test.py
+	python3 tests/test.py
+
+.PHONY: test-src
+test-src: install-src
+	python3 tests/test.py
