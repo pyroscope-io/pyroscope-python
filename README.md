@@ -11,7 +11,7 @@ pip install pyroscope-io
 
 ### Basic Usage of Pyroscope
 ```
-import pyroscope_io as pyroscope
+import pyroscope
 
 pyroscope.configure(
   app_name       = "my.python.app", # replace this with some name for your application
